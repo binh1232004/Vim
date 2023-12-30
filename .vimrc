@@ -105,8 +105,6 @@ nnoremap K :m .-2<CR>==
 nnoremap df vf)d
 "Yank into void register, 
 vnoremap <leader>p "_dP 
-"Append in bracket"
-nnoremap <leader>a" ci"<C-r>"<space>
-nnoremap <leader>a' ci'<C-r>"<space>
-nnoremap <leader>a( ci(<C-r>"<space>
-nnoremap <leader>a[ ci[<C-r>"<space>
+"NerdTree Open
+nnoremap <leader>n :NERDTreeFocus<CR>
+
