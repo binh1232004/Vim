@@ -13,7 +13,7 @@ set noshowmode  " to get rid of thing like --INSERT--
 set noshowcmd  " to get rid of display of last command
 set shortmess+=F  " to get rid of the file name displayed in the command line barset noshowmode
 ""setlocal keymap=vietnamese-telex_utf-8 "enable telex for typing vietnamese"
-" Install Plug by vim-plug
+"=====================================Plugins====================================="
 call plug#begin('~/vimfiles/plugged')
 "Finding in workspace
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -36,6 +36,7 @@ Plug 'vim-airline/vim-airline'
 
 "HTML tags"
 Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 
@@ -58,55 +59,6 @@ colorscheme ayu
 hi Normal guibg=NONE ctermbg=NONE
 let g:NERDTreeFileLines = 1
 "=====================================vim-closetag====================================="
-""" filenames like *.xml, *.html, *.xhtml, ...
-""" These are the file extensions where this plugin is enabled.
-"""
-""let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx'
-""
-""" filenames like *.xml, *.xhtml, ...
-""" This will make the list of non-closing tags self-closing in the specified files.
-"""
-""let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-""
-""" filetypes like xml, html, xhtml, ...
-""" These are the file types where this plugin is enabled.
-"""
-""let g:closetag_filetypes = 'html,xhtml,phtml'
-""
-""" filetypes like xml, xhtml, ...
-""" This will make the list of non-closing tags self-closing in the specified files.
-"""
-""let g:closetag_xhtml_filetypes = 'xhtml,jsx'
-""
-""" integer value [0|1]
-""" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
-"""
-""let g:closetag_emptyTags_caseSensitive = 1
-""
-""" dict
-""" Disables auto-close if not in a "valid" region (based on filetype)
-"""
-""let g:closetag_regions = {
-""    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
-""    \ 'javascript.jsx': 'jsxRegion',
-""    \ 'typescriptreact': 'jsxRegion,tsxRegion',
-""    \ 'javascriptreact': 'jsxRegion',
-""    \ }
-""
-""" Shortcut for closing tags, default is '>'
-"""
-""let g:closetag_shortcut = '>'
-""
-""" Add > at current position without closing the current tag, default is ''
-"""
-""let g:closetag_close_shortcut = '<leader>>'
-""" integer value [0|1]
-""" Enables closing tags for React fragments -> <></> for all supported file types
-"""
-""let g:closetag_enable_react_fragment = 1
-""" Disable closing tags for React fragments -> <></> for all supported file types
-"""
-""let g:closetag_enable_react_fragment = 0
 let g:closetag_filenames = '*.html,*.xhtml,*.jsx,*.tsx'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.tsx'
 let g:closetag_filetypes = 'html,js'
