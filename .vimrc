@@ -20,11 +20,12 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 "Remove hls when move cursor away when finding word
 Plug 'haya14busa/is.vim'
+"ColorScheme
 Plug 'Luxed/ayu-vim'
 "Auto complete
-Plug 'ycm-core/YouCompleteMe'
+""Plug 'ycm-core/YouCompleteMe'
 "Solidity theme
-Plug 'tomlion/vim-solidity' 
+""Plug 'tomlion/vim-solidity' 
 "TreeFolder
 Plug 'preservim/nerdtree'
 "Task bar "
@@ -35,8 +36,18 @@ Plug 'vim-airline/vim-airline'
 ""Plug 'mattn/vim-lsp-settings'
 
 "HTML tags"
-Plug 'alvan/vim-closetag'
-Plug 'tpope/vim-surround'
+""Plug 'alvan/vim-closetag'
+""Plug 'tpope/vim-surround'
+"""Git for vim"
+""Plug 'tpope/vim-fugitive'
+"""VimTex"
+""Plug 'lervag/vimtex'
+""Plug 'aclements/latexrun'
+"LSP connect"
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'mattn/vim-lsp-settings'
 call plug#end()
 
 
@@ -56,19 +67,36 @@ let g:ayucolor="dark"   " for dark version of theme
 " NOTE: g:ayucolor will default to 'dark' when not set.
 
 colorscheme ayu
-hi Normal guibg=NONE ctermbg=NONE
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 let g:NERDTreeFileLines = 1
+"=====================================asynccomplete.vim===================================="
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 "=====================================vim-closetag====================================="
-let g:closetag_filenames = '*.html,*.xhtml,*.jsx,*.tsx'
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.tsx'
+"Must add two option filenames and xhtmlnames to config 
+let g:closetag_filenames = '*.html,*.xhtml,*.jsx,*.tsx,*.js' 
+let g:closetag_xhtml_filenames = '*.xhtml,*.jsx,*.tsx,*.js'
 let g:closetag_filetypes = 'html,js'
-let g:closetag_xhtml_filetype = 'xhtml,jsx,tsx'
+let g:closetag_xhtml_filetype = 'xhtml,jsx,tsx,js'
 let g:closetag_emptyTags_caseSensitive = 1
 let g:closetag_regions = {
   \ 'typescript.tsx': 'jsxRegion,tsxRegion',
   \ 'javascript.jsx': 'jsxRegion',
   \ }
 let g:closetag_shortcut = '>'
+"=====================================LSP====================================="
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> gl <plug>(lsp-document-diagnostics)
+endfunction
+
+augroup lsp_install
+    au!
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 "=====================================Shortcut====================================="
 let mapleader = " "
 nnoremap <leader>pv :Sex<CR>
@@ -86,6 +114,8 @@ nnoremap <leader>b <C-v>
 
 "Save
 nnoremap <C-s> :w<CR>
+inoremap <C-s> <ESC>:w<CR>
+
 "Search in normal mode
 nnoremap <Leader>r :%s///g<Left><Left>
 nnoremap <Leader>rc :%s///gc<Left><Left><Left>
@@ -98,6 +128,7 @@ nnoremap <Leader>f :grep   **/*.js<Left><Left><Left><Left><Left><Left><Left><Lef
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
+inoremap $ $$<left>
 inoremap [ []<left>
 inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
@@ -134,5 +165,6 @@ nnoremap <C-m> :bnext<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 
 "Insert ; to the last pos"
+"Error when coding in for loop ; cause bug
 inoremap ; <ESC>A;
-xnoremap > >
+
