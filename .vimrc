@@ -15,21 +15,10 @@ set shortmess+=F  " to get rid of the file name displayed in the command line ba
 ""setlocal keymap=vietnamese-telex_utf-8 "enable telex for typing vietnamese"
 "=====================================Plugins====================================="
 call plug#begin('~/vimfiles/plugged')
-"Finding in workspace
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-"Remove hls when move cursor away when finding word
-Plug 'haya14busa/is.vim'
-"ColorScheme
-Plug 'Luxed/ayu-vim'
 "Auto complete
 ""Plug 'ycm-core/YouCompleteMe'
 "Solidity theme
 ""Plug 'tomlion/vim-solidity' 
-"TreeFolder
-Plug 'preservim/nerdtree'
-"Task bar "
-Plug 'vim-airline/vim-airline'
 "Syntax check"
 ""Plug 'dense-analysis/ale'
 ""Plug 'prabirshrestha/vim-lsp'
@@ -38,16 +27,31 @@ Plug 'vim-airline/vim-airline'
 "HTML tags"
 ""Plug 'alvan/vim-closetag'
 ""Plug 'tpope/vim-surround'
+
+
 """Git for vim"
 ""Plug 'tpope/vim-fugitive'
-"""VimTex"
-""Plug 'lervag/vimtex'
-""Plug 'aclements/latexrun'
+
+"Finding in workspace
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
+
+"Remove hls when move cursor away when finding word
+Plug 'haya14busa/is.vim'
+"ColorScheme
+Plug 'Luxed/ayu-vim'
+"TreeFolder
+Plug 'preservim/nerdtree'
+"Task bar "
+Plug 'vim-airline/vim-airline'
+
 "LSP connect"
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
+
 call plug#end()
 
 
@@ -88,8 +92,8 @@ let g:closetag_shortcut = '>'
 "=====================================LSP====================================="
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
-    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+   "" nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+   "" nmap <buffer> ]g <plug>(lsp-next-diagnostic)
     nmap <buffer> gl <plug>(lsp-document-diagnostics)
 endfunction
 
@@ -97,8 +101,8 @@ augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
-"=====================================Shortcut====================================="
 let mapleader = " "
+"=====================================Shortcut====================================="
 nnoremap <leader>pv :Sex<CR>
 "File navigation
 nnoremap <C-p> :GFiles<CR>
@@ -116,19 +120,18 @@ nnoremap <leader>b <C-v>
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <ESC>:w<CR>
 
-"Search in normal mode
-nnoremap <Leader>r :%s///g<Left><Left>
-nnoremap <Leader>rc :%s///gc<Left><Left><Left>
-"Search in visual mode
-xnoremap <Leader>r :s///g<Left><Left>
-xnoremap <Leader>rc :s///gc<Left><Left><Left>
+"Substitude in normal mode
+nnoremap <Leader>r :%s:::g<Left><Left>
+nnoremap <Leader>rc :%s:::gc<Left><Left><Left>
+"Substitude in visual mode
+xnoremap <Leader>r :s:::g<Left><Left>
+xnoremap <Leader>rc :s:::gc<Left><Left><Left>
 "Find in workspace
 nnoremap <Leader>f :grep   **/*.js<Left><Left><Left><Left><Left><Left><Left><Left>
 "Auto bracket
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
-inoremap $ $$<left>
 inoremap [ []<left>
 inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
@@ -157,7 +160,8 @@ nnoremap K :m .-2<CR>==
 "Delete method
 nnoremap df vf)d
 "Yank into void register, 
-vnoremap <leader>p "_dP 
+xnoremap <leader>y "-y
+nnoremap <leader>p "-p
 "Move around in buffer"
 nnoremap <C-n> :bprev<CR>
 nnoremap <C-m> :bnext<CR>
@@ -166,5 +170,5 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 
 "Insert ; to the last pos"
 "Error when coding in for loop ; cause bug
-inoremap ; <ESC>A;
+inoremap ;' <ESC>A;
 
