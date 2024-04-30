@@ -13,6 +13,12 @@ set noshowmode  " to get rid of thing like --INSERT--
 set noshowcmd  " to get rid of display of last command
 set shortmess+=F  " to get rid of the file name displayed in the command line barset noshowmode
 ""setlocal keymap=vietnamese-telex_utf-8 "enable telex for typing vietnamese"
+""au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+
+
+"=====================================ColumnRowHighlight====================================="
+set cursorline
+set cursorcolumn
 "=====================================Plugins====================================="
 call plug#begin('~/vimfiles/plugged')
 "Auto complete
@@ -52,8 +58,15 @@ Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
 
-call plug#end()
 
+"Git for vim"
+Plug 'tpope/vim-fugitive'
+"Prettier format"
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+
+call plug#end()
 
 "NERDTree relative number
 " enable line numbers
@@ -69,7 +82,6 @@ set background=dark     " for either mirage or dark version.
 
 let g:ayucolor="dark"   " for dark version of theme
 " NOTE: g:ayucolor will default to 'dark' when not set.
-
 colorscheme ayu
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 let g:NERDTreeFileLines = 1
@@ -90,6 +102,15 @@ let g:closetag_regions = {
   \ }
 let g:closetag_shortcut = '>'
 "=====================================LSP====================================="
+
+if executable('html-languageserver')
+  au User lsp_setup call lsp#register_server({
+      \ 'name': 'html-languageserver',
+      \ 'cmd': {server_info->[&shell, &shellcmdflag, 'html-languageserver --stdio']},
+      \ 'whitelist': ['html', 'javascript', 'typescript'],
+      \ })
+endif
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
    "" nmap <buffer> [g <plug>(lsp-previous-diagnostic)
@@ -100,9 +121,11 @@ endfunction
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+
 augroup END
-let mapleader = " "
+hi Visual  guifg=white guibg=LightBlue gui=none
 "=====================================Shortcut====================================="
+let mapleader = " "
 nnoremap <leader>pv :Sex<CR>
 "File navigation
 nnoremap <C-p> :GFiles<CR>
@@ -127,7 +150,7 @@ nnoremap <Leader>rc :%s:::gc<Left><Left><Left>
 xnoremap <Leader>r :s:::g<Left><Left>
 xnoremap <Leader>rc :s:::gc<Left><Left><Left>
 "Find in workspace
-nnoremap <Leader>f :grep   **/*.js<Left><Left><Left><Left><Left><Left><Left><Left>
+nnoremap <Leader>f :grep   ***.js<Left><Left><Left><Left><Left><Left><Left><Left>
 "Auto bracket
 inoremap " ""<left>
 inoremap ' ''<left>
@@ -169,6 +192,7 @@ nnoremap <C-m> :bnext<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 
 "Insert ; to the last pos"
-"Error when coding in for loop ; cause bug
 inoremap ;' <ESC>A;
-
+"Replace word in all buffer open"
+"Substitude in multi buffer
+nnoremap <leader>rb :bufdo<Space>%s:::g<Space>\|<Space>update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
