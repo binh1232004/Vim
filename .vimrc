@@ -1,3 +1,4 @@
+"Error LSP vim-lsp, can not show pop-up complete on html, css file"
 set hls
 set lazyredraw
 set scrolloff=8
@@ -9,11 +10,46 @@ set shiftwidth=4
 set expandtab
 set smartindent
 set showmatch
+set hidden ""can open another file without saving
 set noshowmode  " to get rid of thing like --INSERT--
 set noshowcmd  " to get rid of display of last command
 set shortmess+=F  " to get rid of the file name displayed in the command line barset noshowmode
 ""setlocal keymap=vietnamese-telex_utf-8 "enable telex for typing vietnamese"
-""au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+autocmd User FugitiveChanged NERDTreeFocus | execute 'normal R' "NerdTree focus when changing"
+"=====================================Folding====================================="
+"Default
+set foldmethod=manual   " fold based on indent
+set foldcolumn=2
+
+"save folding view while leaving"
+autocmd BufWinLeave *.* mkview
+autocmd BufWinEnter *.* silent loadview 
+
+
+"for html file"
+""autocmd FileType html setlocal foldmethod=manual
+""autocmd FileType css setlocal foldmethod=manual
+""autocmd FileType js setlocal foldmethod=manual
+""autocmd FileType tsx setlocal foldmethod=manual
+
+
+"For js file"
+
+autocmd FileType javascript setlocal foldmethod=expr
+autocmd FileType javascript setlocal foldexpr=JSFolds()
+function! JSFolds()
+  let thisline = getline(v:lnum)
+  if thisline =~? '\v^\s*$'
+    return '-1'
+  endif
+
+  if thisline =~ '^import.*$'
+    return 1
+  else
+    return indent(v:lnum) / &shiftwidth
+  endif
+endfunction
+
 
 
 "=====================================ColumnRowHighlight====================================="
@@ -30,13 +66,10 @@ call plug#begin('~/vimfiles/plugged')
 ""Plug 'prabirshrestha/vim-lsp'
 ""Plug 'mattn/vim-lsp-settings'
 
-"HTML tags"
-""Plug 'alvan/vim-closetag'
-""Plug 'tpope/vim-surround'
+Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-surround'
 
 
-"""Git for vim"
-""Plug 'tpope/vim-fugitive'
 
 "Finding in workspace
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -62,10 +95,8 @@ Plug 'mattn/vim-lsp-settings'
 "Git for vim"
 Plug 'tpope/vim-fugitive'
 "Prettier format"
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
-
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 call plug#end()
 
 "NERDTree relative number
@@ -85,6 +116,9 @@ let g:ayucolor="dark"   " for dark version of theme
 colorscheme ayu
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 let g:NERDTreeFileLines = 1
+"=====================================vim-prettier===================================="
+let g:prettier#config#single_quote = 'true'
+let g:prettier#config#trailing_comma = 'all'
 "=====================================asynccomplete.vim===================================="
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -107,7 +141,7 @@ if executable('html-languageserver')
   au User lsp_setup call lsp#register_server({
       \ 'name': 'html-languageserver',
       \ 'cmd': {server_info->[&shell, &shellcmdflag, 'html-languageserver --stdio']},
-      \ 'whitelist': ['html', 'javascript', 'typescript'],
+      \ 'whitelist': ['html', 'javascript', 'typescript', 'css'],
       \ })
 endif
 
@@ -121,9 +155,13 @@ endfunction
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+    autocmd User lsp_buffer_enabled call l:initialization_options()
 
 augroup END
 hi Visual  guifg=white guibg=LightBlue gui=none
+"=====================================vim-prettier====================================="
+"textChanged, or leave insert mode
+let g:prettier#quickfix_enabled = 0
 "=====================================Shortcut====================================="
 let mapleader = " "
 nnoremap <leader>pv :Sex<CR>
@@ -195,4 +233,6 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 inoremap ;' <ESC>A;
 "Replace word in all buffer open"
 "Substitude in multi buffer
-nnoremap <leader>rb :bufdo<Space>%s:::g<Space>\|<Space>update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>
+nnoremap <silent><leader>rb :bufdo<Space>%s:::g<Left><Left>
+"prettier format"
+nnoremap <leader>f :Prettier<CR>
