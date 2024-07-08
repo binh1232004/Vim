@@ -9,13 +9,14 @@ set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
 set smartindent
+set linebreak "" set for wrapping text prevent from being splitting in two
 set showmatch
 set hidden ""can open another file without saving
 set noshowmode  " to get rid of thing like --INSERT--
 set noshowcmd  " to get rid of display of last command
 set shortmess+=F  " to get rid of the file name displayed in the command line barset noshowmode
+set viminfo='1000,f1 " store info of marking in vim
 ""setlocal keymap=vietnamese-telex_utf-8 "enable telex for typing vietnamese"
-autocmd User FugitiveChanged NERDTreeFocus | execute 'normal R' "NerdTree focus when changing"
 "=====================================Folding====================================="
 "Default
 set foldmethod=manual   " fold based on indent
@@ -35,26 +36,26 @@ autocmd BufWinEnter *.* silent loadview
 
 "For js file"
 
-autocmd FileType javascript setlocal foldmethod=expr
-autocmd FileType javascript setlocal foldexpr=JSFolds()
-function! JSFolds()
-  let thisline = getline(v:lnum)
-  if thisline =~? '\v^\s*$'
-    return '-1'
-  endif
-
-  if thisline =~ '^import.*$'
-    return 1
-  else
-    return indent(v:lnum) / &shiftwidth
-  endif
-endfunction
+""autocmd FileType javascript setlocal foldmethod=expr
+""autocmd FileType javascript setlocal foldexpr=JSFolds()
+""function! JSFolds()
+""  let thisline = getline(v:lnum)
+""  if thisline =~? '\v^\s*$'
+""    return '-1'
+""  endif
+""
+""  if thisline =~ '^import.*$'
+""    return 1
+""  else
+""    return indent(v:lnum) / &shiftwidth
+""  endif
+""endfunction
 
 
 
 "=====================================ColumnRowHighlight====================================="
-set cursorline
-set cursorcolumn
+""set cursorline
+""set cursorcolumn
 "=====================================Plugins====================================="
 call plug#begin('~/vimfiles/plugged')
 "Auto complete
@@ -97,6 +98,8 @@ Plug 'tpope/vim-fugitive'
 "Prettier format"
 " post install (yarn install | npm install) then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
+"For tracing when find and substitude"
+Plug 'markonm/traces.vim'
 call plug#end()
 
 "NERDTree relative number
@@ -155,8 +158,6 @@ endfunction
 augroup lsp_install
     au!
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-    autocmd User lsp_buffer_enabled call l:initialization_options()
-
 augroup END
 hi Visual  guifg=white guibg=LightBlue gui=none
 "=====================================vim-prettier====================================="
@@ -229,8 +230,6 @@ nnoremap <C-m> :bnext<CR>
 "NerdTree open"
 nnoremap <leader>n :NERDTreeFocus<CR>
 
-"Insert ; to the last pos"
-inoremap ;' <ESC>A;
 "Replace word in all buffer open"
 "Substitude in multi buffer
 nnoremap <silent><leader>rb :bufdo<Space>%s:::g<Left><Left>
