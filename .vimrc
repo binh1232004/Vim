@@ -70,6 +70,7 @@ call plug#begin('~/vimfiles/plugged')
 Plug 'alvan/vim-closetag'
 Plug 'tpope/vim-surround'
 
+"Plug 'github/copilot.vim'
 
 
 "Finding in workspace
@@ -91,6 +92,8 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
+"For float terminal
+Plug 'voldikss/vim-floaterm'
 
 
 "Git for vim"
@@ -140,13 +143,6 @@ let g:closetag_regions = {
 let g:closetag_shortcut = '>'
 "=====================================LSP====================================="
 
-if executable('html-languageserver')
-  au User lsp_setup call lsp#register_server({
-      \ 'name': 'html-languageserver',
-      \ 'cmd': {server_info->[&shell, &shellcmdflag, 'html-languageserver --stdio']},
-      \ 'whitelist': ['html', 'javascript', 'typescript', 'css'],
-      \ })
-endif
 
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -235,3 +231,5 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <silent><leader>rb :bufdo<Space>%s:::g<Left><Left>
 "prettier format"
 nnoremap <leader>f :Prettier<CR>
+"For float term"
+nnoremap <leader>t :FloatermNew<Space>--height=0.8<Space>--width=0.6<CR>
